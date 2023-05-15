@@ -103,6 +103,5 @@ public class AccessServiceImpl implements AccessService {
 
     private ApiUser internalFindUserByEmail(String email) throws GenericException {
         return apiUserRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new GenericException(String.format("User with %s does not exist", email)));
-
     }
 }
