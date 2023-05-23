@@ -1,7 +1,5 @@
 package africa.crust.controller;
 
-import africa.crust.auth.PrincipalApiUser;
-import africa.crust.auth.annotation.CurrentApiUser;
 import africa.crust.data.dtos.request.CreateVirtualAccountRequest;
 import africa.crust.data.dtos.request.InitiatePaymentRequest;
 import africa.crust.data.dtos.response.ApiResponse;
@@ -25,17 +23,16 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 @Tag(name = "Crust Virtual Account Endpoint", description = "This endpoints contains related Virtual Account Endpoints")
 @SecurityRequirement(name = "SECRET_KEY")
-@SecurityRequirement(name = "BearerAuth")
+//@SecurityRequirement(name = "BearerAuth")
 public class VirtualAccountController {
 
     private final VirtualAccountService virtualAccount;
 
     @GetMapping("/get-virtual-account-creation-status")
-    public ResponseEntity<ApiResponse> getVirtualAccountCreationStatus(@CurrentApiUser PrincipalApiUser currentApiUser,
-                                                                       @RequestParam("trackingRef") String trackingRef,
+    public ResponseEntity<ApiResponse> getVirtualAccountCreationStatus(@RequestParam("trackingRef") String trackingRef,
                                                                        HttpServletRequest request) {
         try {
-            CompletableFuture<VirtualAccountResponse> response = virtualAccount.getVirtualAccountCreationStatus(currentApiUser, trackingRef, request);
+            CompletableFuture<VirtualAccountResponse> response = virtualAccount.getVirtualAccountCreationStatus(trackingRef, request);
             return new ResponseEntity<>(new ApiResponse(true, "Successfully",
                     request.getRequestURL().toString(), response.get()), HttpStatus.CREATED);
         } catch (GenericException | InterruptedException | ExecutionException exception) {
@@ -44,11 +41,10 @@ public class VirtualAccountController {
     }
 
     @GetMapping("/verify-transaction")
-    public ResponseEntity<ApiResponse> verifyTransaction(@CurrentApiUser PrincipalApiUser currentApiUser,
-                                                         @RequestParam("uniqueReference") String uniqueReference,
+    public ResponseEntity<ApiResponse> verifyTransaction(@RequestParam("uniqueReference") String uniqueReference,
                                                          HttpServletRequest request) {
         try {
-            CompletableFuture<VirtualAccountResponse> response = virtualAccount.verifyTransaction(currentApiUser, uniqueReference, request);
+            CompletableFuture<VirtualAccountResponse> response = virtualAccount.verifyTransaction(uniqueReference, request);
             return new ResponseEntity<>(new ApiResponse(true, "Successfully",
                     request.getRequestURL().toString(), response.get()), HttpStatus.CREATED);
         } catch (GenericException | InterruptedException | ExecutionException exception) {
@@ -57,11 +53,10 @@ public class VirtualAccountController {
     }
 
     @PostMapping("/create-virtual-account")
-    public ResponseEntity<ApiResponse> createVirtualAccount(@CurrentApiUser PrincipalApiUser currentApiUser,
-                                                            @RequestBody CreateVirtualAccountRequest virtualAccountRequest,
+    public ResponseEntity<ApiResponse> createVirtualAccount(@RequestBody CreateVirtualAccountRequest virtualAccountRequest,
                                                             HttpServletRequest request) {
         try {
-            CompletableFuture<VirtualAccountResponse> response = virtualAccount.createVirtualAccount(currentApiUser, virtualAccountRequest, request);
+            CompletableFuture<VirtualAccountResponse> response = virtualAccount.createVirtualAccount(virtualAccountRequest, request);
             return new ResponseEntity<>(new ApiResponse(true, "Successfully",
                     request.getRequestURL().toString(), response.get()), HttpStatus.CREATED);
         } catch (GenericException | InterruptedException | ExecutionException | JsonProcessingException exception) {
@@ -70,11 +65,10 @@ public class VirtualAccountController {
     }
 
     @PostMapping("/initiate-payment")
-    public ResponseEntity<ApiResponse> initiatePayment(@CurrentApiUser PrincipalApiUser currentApiUser,
-                                                       @RequestBody InitiatePaymentRequest initiatePayment,
+    public ResponseEntity<ApiResponse> initiatePayment(@RequestBody InitiatePaymentRequest initiatePayment,
                                                        HttpServletRequest request) {
         try {
-            CompletableFuture<VirtualAccountResponse> response = virtualAccount.initiatePayment(currentApiUser, initiatePayment, request);
+            CompletableFuture<VirtualAccountResponse> response = virtualAccount.initiatePayment(initiatePayment, request);
             return new ResponseEntity<>(new ApiResponse(true, "Successfully",
                     request.getRequestURL().toString(), response.get()), HttpStatus.CREATED);
         } catch (GenericException | InterruptedException | ExecutionException | JsonProcessingException exception) {

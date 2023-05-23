@@ -46,21 +46,13 @@ public class AuthServiceImpl implements AuthService{
     private final AccessService accessService;
 
     @Override
-    public RegistrationResponse registerNewUserAccount( HttpServletRequest request, ApiUserRequest userRequest) throws GenericException {
+    public RegistrationResponse registerNewUserAccount(HttpServletRequest request, ApiUserRequest userRequest) throws GenericException {
         if (Boolean.TRUE.equals(userRepository.existsByEmail(userRequest.getEmail()))) {
             throw new GenericException(String.format("%s is already in use", userRequest.getEmail()));
         }
         ApiUser apiUser = mapper.map(userRequest, ApiUser.class);
 
-        String generatedLiveKey = generateLiveSecretKey();
-        String generatedTestKey = generateTestSecretKey();
-
         apiUser.setRole(USER);
-        apiUser.setLivePublicKey(generateLivePublicKey());
-        apiUser.setLiveSecretKey(passwordEncoder.encode(generatedLiveKey));
-
-        apiUser.setTestPublicKey(generateTestPublicKey());
-        apiUser.setTestSecretKey(passwordEncoder.encode(generatedTestKey));
         apiUser.setPassword(passwordEncoder.encode(apiUser.getPassword()));
 
         ApiUser savedApiUser = saveAUser(apiUser);
@@ -77,11 +69,23 @@ public class AuthServiceImpl implements AuthService{
         ipAddresses.add(savedApiUserIpAddress);
         savedApiUser.setApiUserIpAddress(ipAddresses);
 
+        String generatedLiveKey = generateLiveSecretKey();
+        String generatedTestKey = generateTestSecretKey();
+
+        String encodedLiveKey =  passwordEncoder.encode(generatedLiveKey) + "user=" + savedApiUser.getId();
+        String encodedTestKey =  passwordEncoder.encode(generatedTestKey) + "user=" + savedApiUser.getId();
+
+        apiUser.setLivePublicKey(generateLivePublicKey());
+        apiUser.setLiveSecretKey(encodedLiveKey);
+
+        apiUser.setTestPublicKey(generateTestPublicKey());
+        apiUser.setTestSecretKey(encodedTestKey);
+
         ApiUser savedUser = saveAUser(savedApiUser);
 
         RegistrationResponse mappedResponse = mapper.map(savedUser, RegistrationResponse.class);
-        mappedResponse.setTestSecretKey(generatedTestKey);
-        mappedResponse.setLiveSecretKey(generatedLiveKey);
+        mappedResponse.setTestSecretKey(generatedTestKey + "user=" + savedApiUser.getId());
+        mappedResponse.setLiveSecretKey(generatedLiveKey + "user=" + savedApiUser.getId());
         return mappedResponse;
     }
 
@@ -125,6 +129,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     public ApiUser internalFindUserByEmail(String email) throws GenericException {
-        return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new GenericException(String.format("User with %s does not exist", email)));
+        return userRepository.findByEmailIgnoreCase(email).orElseThrow(()
+                -> new GenericException(String.format("User with %s does not exist", email)));
     }
 }

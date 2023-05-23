@@ -24,8 +24,12 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/webjars/**",
-            "/api/v1/crust/auth/**"
-//            "/api/v1/crust/access/**"
+            "/api/v1/crust/auth/**",
+            "api/v1/crust/account/**",
+            "api/v1/crust/card/**",
+            "api/v1/crust/transaction/**",
+            "api/v1/crust/virtual-account/**",
+            "/api/v1/crust/access/**"
     };
 
     @Bean

@@ -1,6 +1,5 @@
 package africa.crust.service;
 
-import africa.crust.auth.PrincipalApiUser;
 import africa.crust.data.dtos.response.AccountTransactionResponse;
 import africa.crust.data.dtos.response.ErrorResponse;
 import africa.crust.exceptions.GenericException;
@@ -31,11 +30,10 @@ public class TransactionApiServiceImpl implements TransactionApiService {
 
 
     @Override
-    public CompletableFuture<AccountTransactionResponse> getCustomerTransactionsByReferenceNumber(PrincipalApiUser currentApiUser,
-                                                                                                  String referenceNumber,
+    public CompletableFuture<AccountTransactionResponse> getCustomerTransactionsByReferenceNumber(String referenceNumber,
                                                                                                   HttpServletRequest servletRequest) throws GenericException {
         CompletableFuture<AccountTransactionResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         String url = baseUrl + "/api/Transaction/GetCustomerTransationsByReferenceNumber/2?authtoken=" + authToken + "&referenceNumber=" + referenceNumber;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse( url)).newBuilder();
         Request request = new Request.Builder()
@@ -69,10 +67,9 @@ public class TransactionApiServiceImpl implements TransactionApiService {
         return future;
     }
 
-    private void isCurrentUserValid(PrincipalApiUser currentApiUser,
-                                    HttpServletRequest servletRequest) throws GenericException {
+    private void isCurrentUserValid(HttpServletRequest servletRequest) throws GenericException {
         boolean isCurrentUserIpAddressAndAccessKeyValid =
-                accessService.isCurrentUserIpAddressAndAccessKeyValid(currentApiUser, servletRequest);
+                accessService.isCurrentUserIpAddressAndAccessKeyValid(servletRequest);
         if (!isCurrentUserIpAddressAndAccessKeyValid)
             throw new GenericException("Bad Request, Check Credentials and try again");
     }

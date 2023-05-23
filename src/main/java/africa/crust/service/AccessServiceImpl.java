@@ -23,17 +23,10 @@ public class AccessServiceImpl implements AccessService {
 
     private final ApiUserRepository apiUserRepository;
     private final ApiUserIpAddressRepository ipAddressRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
 
-    private boolean isUserIpAddressAllowed(PrincipalApiUser currentApiUser, String currentIpAddress) throws GenericException {
-        ApiUser apiUser = internalFindUserByEmail(currentApiUser.getEmail());
-        Set<ApiUserIpAddress> ipAddresses = ipAddressRepository.findByApiUser(apiUser);
 
-        for (ApiUserIpAddress ipAddress : ipAddresses)
-            if (Objects.equals(ipAddress.getIpAddress(), currentIpAddress)) return true;
-        return false;
-    }
-
+    @Override
     public boolean isUserIpAddressAllowed(String email, String currentIpAddress) throws GenericException {
         ApiUser apiUser = internalFindUserByEmail(email);
         Set<ApiUserIpAddress> ipAddresses = ipAddressRepository.findByApiUser(apiUser);
@@ -43,65 +36,95 @@ public class AccessServiceImpl implements AccessService {
         return false;
     }
 
-    private boolean isAccessKeyValid(PrincipalApiUser currentApiUser, HttpServletRequest request) throws GenericException {
-        String currentApiUserAccessKey = getUserAccessKey(request);
-        ApiUser apiUser = internalFindUserByEmail(currentApiUser.getEmail());
-
-        if (currentApiUserAccessKey == null) throw new GenericException("Invalid Request");
-        if (passwordEncoder.matches(currentApiUserAccessKey, apiUser.getLiveSecretKey())) return true;
-        return passwordEncoder.matches(currentApiUserAccessKey, apiUser.getTestSecretKey());
-    }
-
 
     private String getUserAccessKey(HttpServletRequest request) {
         return request.getHeader("SECRET_KEY");
     }
 
-    public boolean isCurrentUserIpAddressAndAccessKeyValid(PrincipalApiUser currentApiUser,
-                                                           HttpServletRequest request) throws GenericException {
-        String currentIpAddress = request.getRemoteAddr();
-        return isUserIpAddressAllowed(currentApiUser, currentIpAddress) && isAccessKeyValid(currentApiUser, request);
-    }
+
 
     @Override
     public ApiUserKey generateTestKey(PrincipalApiUser currentApiUser, HttpServletRequest request) throws GenericException {
-        boolean isCurrentUserIpAddressAndAccessKeyValid = isCurrentUserIpAddressAndAccessKeyValid(currentApiUser, request);
-        if (!isCurrentUserIpAddressAndAccessKeyValid)
-            throw new GenericException("Bad Request, Check Credentials and try again");
-        String testSecretKey = generateTestSecretKey();
-        String testPublicKey = generateTestPublicKey();
+        String userId = currentApiUser.getId();
+        String currentIpAddress = request.getRemoteAddr();
 
-        ApiUser user = internalFindUserByEmail(currentApiUser.getEmail());
-        user.setTestPublicKey(testPublicKey);
-        user.setTestSecretKey(passwordEncoder.encode(testSecretKey));
+        boolean isCurrentUserIpAddressValid = isUserIpAddressValid(userId, currentIpAddress);
+        if (!isCurrentUserIpAddressValid) throw new GenericException("Bad Request, Check Credentials and try again");
+
+        ApiUser user = internalFindUserByUserId(userId);
+
+        String generatedTestSecretKey = generateTestSecretKey();
+        String generatedTestPublicKey = generateTestPublicKey();
+
+        String encodedTestSecretKey =  encoder.encode(generatedTestSecretKey) + "user=" + user.getId();
+
+        user.setTestPublicKey(generatedTestPublicKey);
+        user.setTestSecretKey(encodedTestSecretKey);
+
         apiUserRepository.save(user);
 
         return ApiUserKey.builder()
-                .testSecretKey(testSecretKey)
-                .testPublicKey(testPublicKey)
+                .testSecretKey(generatedTestSecretKey + "user=" + user.getId() )
+                .testPublicKey(generatedTestPublicKey)
                 .build();
     }
 
     @Override
     public ApiUserKey generateLiveKey(PrincipalApiUser currentApiUser, HttpServletRequest request) throws GenericException {
-        boolean isCurrentUserIpAddressAndAccessKeyValid = isCurrentUserIpAddressAndAccessKeyValid(currentApiUser, request);
-        if (!isCurrentUserIpAddressAndAccessKeyValid)
-            throw new GenericException("Bad Request, Check Credentials and try again");
+        String userId = currentApiUser.getId();
+        String currentIpAddress = request.getRemoteAddr();
 
-        String liveSecretKey = generateLiveSecretKey();
-        String livePublicKey = generateLivePublicKey();
-        ApiUser user = internalFindUserByEmail(currentApiUser.getEmail());
-        user.setLivePublicKey(livePublicKey);
-        user.setLiveSecretKey(passwordEncoder.encode(liveSecretKey));
+        boolean isCurrentUserIpAddressValid = isUserIpAddressValid(userId, currentIpAddress);
+        if (!isCurrentUserIpAddressValid) throw new GenericException("Bad Request, Check Credentials and try again");
+
+        ApiUser user = internalFindUserByUserId(userId);
+
+        String generatedLiveSecretKey = generateLiveSecretKey();
+        String generatedLivePublicKey = generateLivePublicKey();
+
+        String encodedLiveSecretKey =  encoder.encode(generatedLiveSecretKey) + "user=" + user.getId();
+
+        user.setLivePublicKey(generatedLivePublicKey);
+        user.setLiveSecretKey(encodedLiveSecretKey);
 
         apiUserRepository.save(user);
         return ApiUserKey.builder()
-                .testSecretKey(liveSecretKey)
-                .testPublicKey(livePublicKey)
+                .testSecretKey(generatedLiveSecretKey + "user=" + user.getId())
+                .testPublicKey(generatedLivePublicKey)
                 .build();
     }
 
+    @Override
+    public boolean isCurrentUserIpAddressAndAccessKeyValid(HttpServletRequest servletRequest) throws GenericException {
+        String currentIpAddress = servletRequest.getRemoteAddr();
+        String userId = getUserIdFromSecretKey(servletRequest);
+        return isUserIpAddressValid(currentIpAddress, userId);
+    }
+
+    private String getUserIdFromSecretKey(HttpServletRequest servletRequest) {
+        String secretKey = getUserAccessKey(servletRequest);
+        int userIdIndex = secretKey.indexOf("user=");
+        return secretKey.substring(userIdIndex + "user=".length());
+    }
+
+    private boolean isUserIpAddressValid(String currentIpAddress, String userId) throws GenericException {
+        ApiUser apiUser = internalFindUserByUserId(userId);
+        Set<ApiUserIpAddress> ipAddresses = ipAddressRepository.findByApiUser(apiUser);
+
+        for (ApiUserIpAddress ipAddress : ipAddresses)
+            if (Objects.equals(ipAddress.getIpAddress(), currentIpAddress)) return true;
+        return false;
+    }
+
     private ApiUser internalFindUserByEmail(String email) throws GenericException {
-        return apiUserRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new GenericException(String.format("User with %s does not exist", email)));
+        return apiUserRepository.findByEmailIgnoreCase(email).orElseThrow(()
+                -> new GenericException(String.format("User with %s does not exist", email)));
+    }
+
+    private ApiUser internalFindUserByUserId(String userId) throws GenericException {
+        ApiUser apiUser =  apiUserRepository.findById(userId).orElse(null);
+
+        if (apiUser != null) return apiUser;
+        else throw new GenericException(String.format("User Id: %s does not exist", userId));
     }
 }

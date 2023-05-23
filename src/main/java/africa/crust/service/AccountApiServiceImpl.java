@@ -1,6 +1,5 @@
 package africa.crust.service;
 
-import africa.crust.auth.PrincipalApiUser;
 import africa.crust.data.dtos.request.*;
 import africa.crust.data.dtos.response.*;
 import africa.crust.exceptions.GenericException;
@@ -35,11 +34,9 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<CreateAccountResponse> createGswAccount(PrincipalApiUser currentApiUser,
-                                                                     String data,
-                                                                     HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<CreateAccountResponse> createGswAccount(String data, HttpServletRequest servletRequest) throws GenericException {
         CompletableFuture<CreateAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/sanef/api/v1/agencybanking/createGswAccount?authtoken=" + authToken)).newBuilder();
         JSONObject body = new JSONObject();
@@ -78,13 +75,11 @@ public class AccountApiServiceImpl implements AccountApiService {
         return future;
     }
 
-
     @Override
-    public CompletableFuture<CreateAccountResponse> createGsaAccount(PrincipalApiUser currentApiUser,
-                                                                     String data,
-                                                                     HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<CreateAccountResponse> createGsaAccount(String data, HttpServletRequest servletRequest) throws GenericException {
         CompletableFuture<CreateAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
+
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/sanef/api/v1/agencybanking/createGsaAccount?authtoken=" + authToken)).newBuilder();
         JSONObject body = new JSONObject();
         body.put("data", data);
@@ -122,13 +117,11 @@ public class AccountApiServiceImpl implements AccountApiService {
         return future;
     }
 
-
     @Override
-    public CompletableFuture<CustomerAndAccountResponse> createCustomerAndAccount(PrincipalApiUser currentApiUser,
-                                                                                  CreateCustomerAndAccount createCustomerAndAccount,
+    public CompletableFuture<CustomerAndAccountResponse> createCustomerAndAccount(CreateCustomerAndAccount createCustomerAndAccount,
                                                                                   HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CustomerAndAccountResponse> future = new CompletableFuture<>();
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/api/Account/CreateCustomerAndAccount/2?authtoken=" + authToken)).newBuilder();
         String body = mapper.writeValueAsString(createCustomerAndAccount);
@@ -168,11 +161,11 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<CustomerAndAccountResponse> createCustomerAndAccountT3(PrincipalApiUser currentApiUser,
-                                                                                    CreateCustomerAndAccount createCustomerAndAccount,
+    public CompletableFuture<CustomerAndAccountResponse> createCustomerAndAccountT3(CreateCustomerAndAccount createCustomerAndAccount,
                                                                                     HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
         CompletableFuture<CustomerAndAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
+
         String url = baseUrl + "/api/Account/CreateCustomerAndAccountT3/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         String body = mapper.writeValueAsString(createCustomerAndAccount);
@@ -213,11 +206,11 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<UpdateAccountResponse> updateAccountTier(PrincipalApiUser currentApiUser,
-                                                                      UpdateAccountTierRequest updateAccountTierRequest,
+    public CompletableFuture<UpdateAccountResponse> updateAccountTier(UpdateAccountTierRequest updateAccountTierRequest,
                                                                       HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<UpdateAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
                 baseUrl + "/api/Account/UpdateAccountTier/2?authtoken=" + authToken)).newBuilder();
         String body = mapper.writeValueAsString(updateAccountTierRequest);
@@ -257,11 +250,11 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<UpdateAccountResponse> updateAccountTier2(PrincipalApiUser currentApiUser,
-                                                                       UpdateAccountTierRequest updateAccountTierRequest,
+    public CompletableFuture<UpdateAccountResponse> updateAccountTier2(UpdateAccountTierRequest updateAccountTierRequest,
                                                                        HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<UpdateAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
                 baseUrl + "/api/Account/UpdateAccountTier2/2?authtoken=" + authToken)).newBuilder();
         String body = mapper.writeValueAsString(updateAccountTierRequest);
@@ -302,11 +295,10 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<UpdateAccountResponse> updateAccountNotificationPreference(PrincipalApiUser currentApiUser,
-                                                                                        UpdateAccountNotificationPreference updateAccountNotificationPreference,
+    public CompletableFuture<UpdateAccountResponse> updateAccountNotificationPreference(UpdateAccountNotificationPreference updateAccountNotificationPreference,
                                                                                         HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<UpdateAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
                 baseUrl + "/api/Account/UpdateAccountNotificationPreference/2?authtoken=" + authToken)).newBuilder();
         String body = mapper.writeValueAsString(updateAccountNotificationPreference);
@@ -347,12 +339,10 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<UpdateAccountResponse> updateSupportingDocument(PrincipalApiUser currentApiUser,
-                                                                             UpdateSupportingDocument updateSupportingDocument,
+    public CompletableFuture<UpdateAccountResponse> updateSupportingDocument(UpdateSupportingDocument updateSupportingDocument,
                                                                              HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<UpdateAccountResponse> future = new CompletableFuture<>();
-
-        isCurrentUserValid(currentApiUser, servletRequest);
 
         String createAccountUrl = baseUrl + "/api/Account/UploadSupportingDocument/2?authtoken=" + authToken;
         HttpUrl createAccountUrlEndpoint = HttpUrl.parse(createAccountUrl);
@@ -401,12 +391,11 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<UpdateAccountResponse> getSupportingDocument(PrincipalApiUser currentApiUser,
-                                                                          String accountNumber,
-                                                                          Integer docType,
+    public CompletableFuture<UpdateAccountResponse> getSupportingDocument(String accountNumber, Integer docType,
                                                                           HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<UpdateAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/api/Account/GetSupportingDocument" +
                 "/2?authtoken=" + authToken + "&accountNumber=" + accountNumber + "&doctype=" + docType)).newBuilder();
 
@@ -445,12 +434,12 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<AccountByTransactionReferenceResponse> getAccountByTransactionTrackingReference(PrincipalApiUser currentApiUser,
-                                                                                                             String transactionTrackingRef,
+    public CompletableFuture<AccountByTransactionReferenceResponse> getAccountByTransactionTrackingReference(String transactionTrackingRef,
                                                                                                              Boolean computeWithdrawalBalance,
                                                                                                              HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<AccountByTransactionReferenceResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
                 baseUrl + "/api/Account/GetAccountByTransactionTrackingRef/2?authtoken=" + authToken
                         + "&transactionTrackingRef=" + transactionTrackingRef + "&computewithdrawableBalance="
@@ -491,12 +480,12 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<AccountByTransactionReferenceResponse> getAccountByTransactionTrackingReference2(PrincipalApiUser currentApiUser,
-                                                                                                              String transactionTrackingRef,
+    public CompletableFuture<AccountByTransactionReferenceResponse> getAccountByTransactionTrackingReference2(String transactionTrackingRef,
                                                                                                               Boolean computeWithdrawalBalance,
                                                                                                               HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<AccountByTransactionReferenceResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
                 baseUrl + "/api/Account/GetAccountByTransactionTrackingRef2/2?authtoken=" + authToken
                         + "&transactionTrackingRef=" + transactionTrackingRef + "&computewithdrawableBalance="
@@ -537,12 +526,12 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<AccountByTransactionReferenceResponse> getAccountByAccountNumber(PrincipalApiUser currentApiUser,
-                                                                                              String accountNumber,
+    public CompletableFuture<AccountByTransactionReferenceResponse> getAccountByAccountNumber(String accountNumber,
                                                                                               Boolean computeWithdrawalBalance,
                                                                                               HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<AccountByTransactionReferenceResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         String url = baseUrl + "/api/Account/GetAccountByAccountNumber/2?authtoken="
                 + authToken + "&accountNumber=" + accountNumber + "&computewithdrawableBalance="
                 + computeWithdrawalBalance;
@@ -582,14 +571,13 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<ActiveSavingResponse> getGetActiveSavingsAccountsByCustomerID(PrincipalApiUser currentApiUser,
-                                                                                           String customerId,
-                                                                                           HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<ActiveSavingResponse> getGetActiveSavingsAccountsByCustomerID(String customerId, HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<ActiveSavingResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
-                baseUrl + "/api/Account/GetActiveSavingsAccountsByCustomerID/2?authtoken=" + authToken
-                        + "&customerId=" + customerId)).newBuilder();
+
+        String url = baseUrl + "/api/Account/GetActiveSavingsAccountsByCustomerID/2?authtoken=" + authToken + "&customerId=" + customerId;
+
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         Request request = new Request.Builder()
                 .url(urlBuilder.build())
                 .header("Content-Type", "application/json")
@@ -625,14 +613,13 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<ActiveSavingResponse2> getGetActiveSavingsAccountsByCustomerID2(PrincipalApiUser currentApiUser,
-                                                                                             String customerId,
-                                                                                             HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<ActiveSavingResponse2> getGetActiveSavingsAccountsByCustomerID2(String customerId, HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<ActiveSavingResponse2> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
-                baseUrl + "/api/Account/GetActiveSavingsAccountsByCustomerID2/2?authtoken="
-                        + authToken + "&customerId=" + customerId)).newBuilder();
+
+        String url = baseUrl + "/api/Account/GetActiveSavingsAccountsByCustomerID2/2?authtoken=" + authToken + "&customerId=" + customerId;
+
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         Request request = new Request.Builder()
                 .url(urlBuilder.build())
                 .get()
@@ -667,13 +654,14 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<GetAccountsByCustomerIdResponse> getAccountsByCustomerID(PrincipalApiUser currentApiUser,
-                                                                                      String customerId,
-                                                                                      HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<GetAccountsByCustomerIdResponse> getAccountsByCustomerID(String customerId, HttpServletRequest servletRequest) throws GenericException {
+
+        isCurrentUserValid(servletRequest);
         CompletableFuture<GetAccountsByCustomerIdResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        String url = baseUrl + "/api/Account/GetAccountsByCustomerId/2?authtoken=" + authToken + "&customerId=" + customerId;
+
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
-                baseUrl + "/api/Account/GetAccountsByCustomerId/2?authtoken=" + authToken + "&customerId=" + customerId)).newBuilder();
+                url)).newBuilder();
         Request request = new Request.Builder()
                 .url(urlBuilder.build())
                 .header("Content-Type", "application/json")
@@ -708,11 +696,10 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<CustomerAndAccountResponse> createQuickAccount(PrincipalApiUser currentApiUser,
-                                                                            CreateCustomerAndAccount createCustomerAndAccount,
+    public CompletableFuture<CustomerAndAccountResponse> createQuickAccount(CreateCustomerAndAccount createCustomerAndAccount,
                                                                             HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CustomerAndAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
         String createAccountUrl = baseUrl + "/api/Account/CreateAccountQuick/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(createAccountUrl)).newBuilder();
         String body = mapper.writeValueAsString(createCustomerAndAccount);
@@ -752,11 +739,11 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<CustomerAndAccountResponse> onBoardCustomer(PrincipalApiUser currentApiUser,
-                                                                         OnBoardCustomerRequest onBoardCustomer,
+    public CompletableFuture<CustomerAndAccountResponse> onBoardCustomer(OnBoardCustomerRequest onBoardCustomer,
                                                                          HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CustomerAndAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         String url = baseUrl + "/api/Account/OnboardCustomer/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         String body = mapper.writeValueAsString(onBoardCustomer);
@@ -796,11 +783,11 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<CustomerAndAccountResponse> createCustomerAccount(PrincipalApiUser currentApiUser,
-                                                                               CreateCustomerAndAccount createCustomerAndAccount,
+    public CompletableFuture<CustomerAndAccountResponse> createCustomerAccount(CreateCustomerAndAccount createCustomerAndAccount,
                                                                                HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CustomerAndAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
         String url = baseUrl + "/api/Account/CreateCustomerAccount/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         String body = mapper.writeValueAsString(createCustomerAndAccount);
@@ -841,11 +828,12 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<BalanceResponse> getOutstandingBalance(PrincipalApiUser currentApiUser,
+    public CompletableFuture<BalanceResponse> getOutstandingBalance(
                                                                     String accountNumber,
                                                                     HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<BalanceResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         String url = baseUrl + "/api/Account/GetOutstandingBalance/2?mfbCode=" + mfbCode + "&authtoken="
                 + authToken + "&accountNumber=" + accountNumber;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
@@ -884,11 +872,11 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<CustomerAndAccountResponse> addAccountToCustomer(PrincipalApiUser currentApiUser,
-                                                                              AddAccountToCustomerRequest addAccountToCustomerRequest,
+    public CompletableFuture<CustomerAndAccountResponse> addAccountToCustomer(AddAccountToCustomerRequest addAccountToCustomerRequest,
                                                                               HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CustomerAndAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
         String url = baseUrl + "/api/Account/AddAccountToCustomer/2?authtoken=" + authToken + "&mfbCode=" + mfbCode;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         String body = mapper.writeValueAsString(addAccountToCustomerRequest);
@@ -929,11 +917,11 @@ public class AccountApiServiceImpl implements AccountApiService {
 
 
     @Override
-    public CompletableFuture<CustomerAndAccountResponse> createAccount(PrincipalApiUser currentApiUser,
-                                                                       CreateCustomerAndAccount createCustomerAndAccount,
+    public CompletableFuture<CustomerAndAccountResponse> createAccount(CreateCustomerAndAccount createCustomerAndAccount,
                                                                        HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CustomerAndAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
         String url = baseUrl + "/api/Account/CreateAccount/2?authtoken=" + authToken + "&mfbCode=" + mfbCode;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         String body = mapper.writeValueAsString(createCustomerAndAccount);
@@ -973,11 +961,10 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<CustomerAndAccountResponse> retrieveAccountNumber(PrincipalApiUser currentApiUser,
-                                                                               String acctOpeningTrackingRef,
+    public CompletableFuture<CustomerAndAccountResponse> retrieveAccountNumber(String acctOpeningTrackingRef,
                                                                                HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CustomerAndAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
         String url = baseUrl + "/api/Account/RetrieveAccountNumber/2?authtoken=" + authToken
                 + "&acctOpeningTrackingRef=" + acctOpeningTrackingRef + "&mfbCode=" + mfbCode;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
@@ -1018,11 +1005,10 @@ public class AccountApiServiceImpl implements AccountApiService {
 
     // Continue from here
     @Override
-    public CompletableFuture<NameEnquiryResponse> doNameEnquiry(PrincipalApiUser currentApiUser,
-                                                                String accountNumber,
+    public CompletableFuture<NameEnquiryResponse> doNameEnquiry(String accountNumber,
                                                                 HttpServletRequest servletRequest) throws GenericException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<NameEnquiryResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
         String url = baseUrl + "/api/Account/DoNameEnquiry/2?authtoken=" + authToken + "&accountNumber=" + accountNumber + "&institutionCode=" + institutionCode;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         JSONObject body = new JSONObject();
@@ -1063,11 +1049,12 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<DoBalanceEnquiryResponse> doBalanceEnquiry(PrincipalApiUser currentApiUser,
-                                                                        EnquiryRequest enquiryRequest,
+    public CompletableFuture<DoBalanceEnquiryResponse> doBalanceEnquiry(EnquiryRequest enquiryRequest,
                                                                         HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+
+        isCurrentUserValid(servletRequest);
         CompletableFuture<DoBalanceEnquiryResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         String url = baseUrl + "/api/Account/DoBalanceEnquiry/2?authtoken=" + authToken;
         enquiryRequest.setInstitutionCode(institutionCode);
         log.info("Institution Code " + institutionCode );
@@ -1109,11 +1096,11 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<DoBalanceEnquiryResponse> doFundsTransfer(PrincipalApiUser currentApiUser,
-                                                                       EnquiryRequest enquiryRequest,
+    public CompletableFuture<DoBalanceEnquiryResponse> doFundsTransfer(EnquiryRequest enquiryRequest,
                                                                        HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<DoBalanceEnquiryResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         enquiryRequest.setInstitutionCode(institutionCode);
         String url = baseUrl + "/api/Account/DoFundsTransfer/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
@@ -1152,11 +1139,11 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<DoBalanceEnquiryResponse> confirmTransaction(PrincipalApiUser currentApiUser,
-                                                                          EnquiryRequest enquiryRequest,
+    public CompletableFuture<DoBalanceEnquiryResponse> confirmTransaction(EnquiryRequest enquiryRequest,
                                                                           HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+        isCurrentUserValid(servletRequest);
         CompletableFuture<DoBalanceEnquiryResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+
         enquiryRequest.setInstitutionCode(institutionCode);
         String url = baseUrl + "/api/Account/ConfirmTransaction/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
@@ -1194,11 +1181,11 @@ public class AccountApiServiceImpl implements AccountApiService {
     }
 
     @Override
-    public CompletableFuture<DoBalanceEnquiryResponse> reverseTransaction(PrincipalApiUser currentApiUser,
-                                                                          ReverseTransactionRequest reverseTransactionRequest,
+    public CompletableFuture<DoBalanceEnquiryResponse> reverseTransaction(ReverseTransactionRequest reverseTransactionRequest,
                                                                           HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
+
+        isCurrentUserValid(servletRequest);
         CompletableFuture<DoBalanceEnquiryResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
         reverseTransactionRequest.setInstitutionCode(institutionCode);
         String url = baseUrl + "/api/Account/ReverseTransaction/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
@@ -1236,10 +1223,9 @@ public class AccountApiServiceImpl implements AccountApiService {
         return future;
     }
 
-    private void isCurrentUserValid(PrincipalApiUser currentApiUser,
-                                    HttpServletRequest servletRequest) throws GenericException {
+    private void isCurrentUserValid(HttpServletRequest servletRequest) throws GenericException {
         boolean isCurrentUserIpAddressAndAccessKeyValid =
-                accessService.isCurrentUserIpAddressAndAccessKeyValid(currentApiUser, servletRequest);
+                accessService.isCurrentUserIpAddressAndAccessKeyValid(servletRequest);
         if (!isCurrentUserIpAddressAndAccessKeyValid)
             throw new GenericException("Bad Request, Check Credentials and try again");
     }

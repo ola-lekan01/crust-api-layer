@@ -1,6 +1,5 @@
 package africa.crust.service;
 
-import africa.crust.auth.PrincipalApiUser;
 import africa.crust.data.dtos.request.*;
 import africa.crust.data.dtos.response.*;
 import africa.crust.exceptions.GenericException;
@@ -10,108 +9,80 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 
 public interface ApiUserService {
-    CompletableFuture<CardResponse> registerCardHolderSynchronously(PrincipalApiUser currentApiUser,
-                                                                    HttpServletRequest request,
+    CompletableFuture<CardResponse> registerCardHolderSynchronously(HttpServletRequest request,
                                                                     CardHolderRegistration cardHolderRegistration) throws GenericException, JsonProcessingException;
 
 
-    CompletableFuture<CardHolderDetailResponse> getCardHolderDetails(PrincipalApiUser currentApiUser,
-                                                                     HttpServletRequest request,
+    CompletableFuture<CardHolderDetailResponse> getCardHolderDetails(HttpServletRequest request,
                                                                      String cardHolderId) throws GenericException;
 
-    CompletableFuture<CardHolderDetailResponse> deleteCardHolder(PrincipalApiUser currentApiUser,
-                                                                 HttpServletRequest request,
+    CompletableFuture<CardHolderDetailResponse> deleteCardHolder(HttpServletRequest request,
                                                                  String cardHolderId) throws GenericException;
 
-    CompletableFuture<CardResponse> createCard(PrincipalApiUser currentApiUser,
-                                               HttpServletRequest servletRequest,
+    CompletableFuture<CardResponse> createCard(HttpServletRequest servletRequest,
                                                CreateCardRequest createCardRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CardResponse> activatePhysicalCard(PrincipalApiUser currentApiUser,
-                                                         HttpServletRequest servletRequest,
+    CompletableFuture<CardResponse> activatePhysicalCard(HttpServletRequest servletRequest,
                                                          CreateCardRequest createCardRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CardDetailResponse> getCardDetails(PrincipalApiUser currentApiUser,
-                                                         HttpServletRequest servletRequest,
+    CompletableFuture<CardDetailResponse> getCardDetails(HttpServletRequest servletRequest,
                                                          String cardId) throws GenericException;
 
-    CompletableFuture<CardBalanceResponse> getCardBalance(PrincipalApiUser currentApiUser,
-                                                          HttpServletRequest servletRequest,
+    CompletableFuture<CardBalanceResponse> getCardBalance(HttpServletRequest servletRequest,
                                                           String cardId) throws GenericException;
 
-    CompletableFuture<CardResponse> fundCard(PrincipalApiUser currentApiUser,
-                                             HttpServletRequest servletRequest,
+    CompletableFuture<CardResponse> fundCard(HttpServletRequest servletRequest,
                                              FundCardRequest fundCardRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CardResponse> unloadCard(PrincipalApiUser currentApiUser,
-                                               HttpServletRequest servletRequest,
+    CompletableFuture<CardResponse> unloadCard(HttpServletRequest servletRequest,
                                                FundCardRequest fundCardRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CardTransactionsResponse> getCardTransactions(PrincipalApiUser currentApiUser,
-                                                                    HttpServletRequest servletRequest,
+    CompletableFuture<CardTransactionsResponse> getCardTransactions(HttpServletRequest servletRequest,
                                                                     String cardId) throws GenericException;
 
-    CompletableFuture<CardTransactionsResponse> getCardTransaction(PrincipalApiUser currentApiUser,
-                                                                   HttpServletRequest servletRequest,
+    CompletableFuture<CardTransactionsResponse> getCardTransaction(HttpServletRequest servletRequest,
                                                                    String cardId,
                                                                    String clientTransactionReference) throws GenericException;
 
-    CompletableFuture<CardResponse> freezeCard(PrincipalApiUser currentApiUser,
-                                               HttpServletRequest servletRequest,
+    CompletableFuture<CardResponse> freezeCard(HttpServletRequest servletRequest,
                                                String cardId) throws GenericException;
 
-    CompletableFuture<CardResponse> unFreezeCard(PrincipalApiUser currentApiUser,
-                                                 HttpServletRequest servletRequest,
-                                                 String cardId) throws GenericException;
+    CompletableFuture<CardResponse> unFreezeCard(HttpServletRequest servletRequest, String cardId) throws GenericException;
 
 
-    CompletableFuture<CardHolderCardResponse> getCardHolderCardsDetails(PrincipalApiUser currentApiUser,
-                                                                        HttpServletRequest servletRequest,
+    CompletableFuture<CardHolderCardResponse> getCardHolderCardsDetails(HttpServletRequest servletRequest,
                                                                         String cardHolderId) throws GenericException;
 
-    CompletableFuture<CardResponse> createNairaVirtualAccount(PrincipalApiUser currentApiUser,
-                                                              HttpServletRequest servletRequest,
+    CompletableFuture<CardResponse> createNairaVirtualAccount(HttpServletRequest servletRequest,
                                                               String cardHolderId) throws GenericException;
 
-    CompletableFuture<CardBalanceResponse> getNairaCardBalance(PrincipalApiUser currentApiUser,
-                                                               HttpServletRequest servletRequest,
+    CompletableFuture<CardBalanceResponse> getNairaCardBalance(HttpServletRequest servletRequest,
                                                                String cardHolderId) throws GenericException;
 
-    CompletableFuture<GetAllBanksCode> getAllBanksCode(PrincipalApiUser currentApiUser,
-                                                       HttpServletRequest servletRequest) throws GenericException;
+    CompletableFuture<GetAllBanksCode> getAllBanksCode(HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<CardResponse> verifyAccountNumber(PrincipalApiUser currentApiUser,
-                                                        HttpServletRequest servletRequest,
+    CompletableFuture<CardResponse> verifyAccountNumber(HttpServletRequest servletRequest,
                                                         AccountNumberVerificationRequest verificationRequest) throws GenericException;
 
-    CompletableFuture<CardTransactionsResponse> getNairaCardTransactions(PrincipalApiUser currentApiUser,
-                                                                         HttpServletRequest servletRequest,
+    CompletableFuture<CardTransactionsResponse> getNairaCardTransactions(HttpServletRequest servletRequest,
                                                                          String cardHolderId) throws GenericException;
 
-    CompletableFuture<TransferResponse> thirdPartyTransfer(PrincipalApiUser currentApiUser,
-                                                           HttpServletRequest servletRequest,
+    CompletableFuture<TransferResponse> thirdPartyTransfer(HttpServletRequest servletRequest,
                                                            ThirdPartyTransferRequest thirdPartyTransferRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<TransferResponse> sameBankTransfer(PrincipalApiUser currentApiUser,
-                                      HttpServletRequest servletRequest,
+    CompletableFuture<TransferResponse> sameBankTransfer(HttpServletRequest servletRequest,
                                       SameBankTransferRequest sameBankTransfer) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<AllCardholdersResponse>getAllCreatedCardHolders(PrincipalApiUser currentApiUser,
-                                                                      HttpServletRequest servletRequest) throws GenericException;
+    CompletableFuture<AllCardholdersResponse>getAllCreatedCardHolders(HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<IssuedCardResponse> getAllIssuedCard(PrincipalApiUser currentApiUser,
-                                        HttpServletRequest servletRequest) throws GenericException;
+    CompletableFuture<IssuedCardResponse> getAllIssuedCard(HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<IssuingWalletResponse> fundIssuingWallet(PrincipalApiUser currentApiUser,
-                                                               HttpServletRequest servletRequest,
+    CompletableFuture<IssuingWalletResponse> fundIssuingWallet(HttpServletRequest servletRequest,
                                                                String amount) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<IssuingWalletResponse> getIssuingWalletBalance(PrincipalApiUser currentApiUser,
-                                                  HttpServletRequest servletRequest) throws GenericException;
+    CompletableFuture<IssuingWalletResponse> getIssuingWalletBalance(HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<FXRateExchange> getFXRateExchange(PrincipalApiUser currentApiUser,
-                                                        HttpServletRequest servletRequest) throws GenericException;
+    CompletableFuture<FXRateExchange> getFXRateExchange(HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<AllStatesResponse> getAllStates(PrincipalApiUser currentApiUser,
-                                   HttpServletRequest servletRequest) throws GenericException;
+    CompletableFuture<AllStatesResponse> getAllStates(HttpServletRequest servletRequest) throws GenericException;
 }

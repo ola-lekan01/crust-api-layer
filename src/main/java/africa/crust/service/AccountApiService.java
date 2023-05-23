@@ -1,6 +1,5 @@
 package africa.crust.service;
 
-import africa.crust.auth.PrincipalApiUser;
 import africa.crust.data.dtos.request.*;
 import africa.crust.data.dtos.response.*;
 import africa.crust.exceptions.GenericException;
@@ -10,117 +9,89 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 
 public interface AccountApiService {
-    CompletableFuture<CreateAccountResponse> createGswAccount(PrincipalApiUser currentApiUser,
-                                                              String data,
+    CompletableFuture<CreateAccountResponse> createGswAccount(String data,
                                                               HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<CreateAccountResponse> createGsaAccount(PrincipalApiUser currentApiUser,
-                                                              String data,
+    CompletableFuture<CreateAccountResponse> createGsaAccount(String data,
                                                               HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<CustomerAndAccountResponse> createCustomerAndAccount(PrincipalApiUser currentApiUser,
-                                                                           CreateCustomerAndAccount createCustomerAndAccount,
+    CompletableFuture<CustomerAndAccountResponse> createCustomerAndAccount(CreateCustomerAndAccount createCustomerAndAccount,
                                                                            HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CustomerAndAccountResponse> createCustomerAndAccountT3(PrincipalApiUser currentApiUser,
-                                                                             CreateCustomerAndAccount createCustomerAndAccount,
+    CompletableFuture<CustomerAndAccountResponse> createCustomerAndAccountT3(CreateCustomerAndAccount createCustomerAndAccount,
                                                                              HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<UpdateAccountResponse> updateAccountTier(PrincipalApiUser currentApiUser,
-                                                               UpdateAccountTierRequest updateAccountTierRequest,
+    CompletableFuture<UpdateAccountResponse> updateAccountTier(UpdateAccountTierRequest updateAccountTierRequest,
                                                                HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
 
-    CompletableFuture<UpdateAccountResponse> updateAccountTier2(PrincipalApiUser currentApiUser,
-                                                                UpdateAccountTierRequest updateAccountTierRequest,
+    CompletableFuture<UpdateAccountResponse> updateAccountTier2(UpdateAccountTierRequest updateAccountTierRequest,
                                                                 HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<UpdateAccountResponse> updateAccountNotificationPreference(PrincipalApiUser currentApiUser,
-                                                                                 UpdateAccountNotificationPreference updateAccountNotificationPreference,
+    CompletableFuture<UpdateAccountResponse> updateAccountNotificationPreference(UpdateAccountNotificationPreference updateAccountNotificationPreference,
                                                                                  HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<UpdateAccountResponse> updateSupportingDocument(PrincipalApiUser currentApiUser,
-                                                                      UpdateSupportingDocument updateSupportingDocument,
+    CompletableFuture<UpdateAccountResponse> updateSupportingDocument(UpdateSupportingDocument updateSupportingDocument,
                                                                       HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<UpdateAccountResponse> getSupportingDocument(PrincipalApiUser currentApiUser,
-                                                                   String accountNumber,
-                                                                   Integer docType,
+    CompletableFuture<UpdateAccountResponse> getSupportingDocument(String accountNumber, Integer docType,
                                                                    HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<AccountByTransactionReferenceResponse> getAccountByTransactionTrackingReference(PrincipalApiUser currentApiUser,
-                                                                                                      String transactionTrackingRef,
+    CompletableFuture<AccountByTransactionReferenceResponse> getAccountByTransactionTrackingReference(String transactionTrackingRef,
                                                                                                       Boolean computeWithdrawalBalance,
                                                                                                       HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<AccountByTransactionReferenceResponse> getAccountByTransactionTrackingReference2(PrincipalApiUser currentApiUser,
-                                                                                                       String transactionTrackingRef,
+    CompletableFuture<AccountByTransactionReferenceResponse> getAccountByTransactionTrackingReference2(String transactionTrackingRef,
                                                                                                        Boolean computeWithdrawalBalance,
                                                                                                        HttpServletRequest servletRequest) throws GenericException;
 
 
-    CompletableFuture<AccountByTransactionReferenceResponse> getAccountByAccountNumber(PrincipalApiUser currentApiUser,
-                                                                                       String accountNumber,
+    CompletableFuture<AccountByTransactionReferenceResponse> getAccountByAccountNumber(String accountNumber,
                                                                                        Boolean computeWithdrawalBalance,
                                                                                        HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<ActiveSavingResponse> getGetActiveSavingsAccountsByCustomerID(PrincipalApiUser currentApiUser,
-                                                                                    String customerId,
+    CompletableFuture<ActiveSavingResponse> getGetActiveSavingsAccountsByCustomerID(String customerId,
                                                                                     HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<ActiveSavingResponse2> getGetActiveSavingsAccountsByCustomerID2(PrincipalApiUser currentApiUser,
-                                                                                      String customerId,
+    CompletableFuture<ActiveSavingResponse2> getGetActiveSavingsAccountsByCustomerID2(String customerId,
                                                                                       HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<GetAccountsByCustomerIdResponse> getAccountsByCustomerID(PrincipalApiUser currentApiUser,
-                                                                               String customerId,
+    CompletableFuture<GetAccountsByCustomerIdResponse> getAccountsByCustomerID(String customerId,
                                                                                HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<CustomerAndAccountResponse> createQuickAccount(PrincipalApiUser currentApiUser,
-                                                                     CreateCustomerAndAccount createCustomerAndAccount,
+    CompletableFuture<CustomerAndAccountResponse> createQuickAccount(CreateCustomerAndAccount createCustomerAndAccount,
                                                                      HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CustomerAndAccountResponse> onBoardCustomer(PrincipalApiUser currentApiUser,
-                                                                  OnBoardCustomerRequest onBoardCustomer,
+    CompletableFuture<CustomerAndAccountResponse> onBoardCustomer(OnBoardCustomerRequest onBoardCustomer,
                                                                   HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CustomerAndAccountResponse> createCustomerAccount(PrincipalApiUser currentApiUser,
-                                                                        CreateCustomerAndAccount createCustomerAndAccount,
+    CompletableFuture<CustomerAndAccountResponse> createCustomerAccount(CreateCustomerAndAccount createCustomerAndAccount,
                                                                         HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    public CompletableFuture<BalanceResponse> getOutstandingBalance(PrincipalApiUser currentApiUser,
-                                                                    String accountNumber,
+    public CompletableFuture<BalanceResponse> getOutstandingBalance(String accountNumber,
                                                                     HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<CustomerAndAccountResponse> addAccountToCustomer(PrincipalApiUser currentApiUser,
-                                                                       AddAccountToCustomerRequest addAccountToCustomerRequest,
+    CompletableFuture<CustomerAndAccountResponse> addAccountToCustomer(AddAccountToCustomerRequest addAccountToCustomerRequest,
                                                                        HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CustomerAndAccountResponse> createAccount(PrincipalApiUser currentApiUser,
-                                                                CreateCustomerAndAccount createCustomerAndAccount,
+    CompletableFuture<CustomerAndAccountResponse> createAccount(CreateCustomerAndAccount createCustomerAndAccount,
                                                                 HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<CustomerAndAccountResponse> retrieveAccountNumber(PrincipalApiUser currentApiUser,
-                                                                        String acctOpeningTrackingRef,
+    CompletableFuture<CustomerAndAccountResponse> retrieveAccountNumber(String acctOpeningTrackingRef,
                                                                         HttpServletRequest servletRequest) throws GenericException;
 
-    CompletableFuture<NameEnquiryResponse> doNameEnquiry(PrincipalApiUser currentApiUser,
-                                                         String accountNumber,
+    CompletableFuture<NameEnquiryResponse> doNameEnquiry(String accountNumber,
                                                          HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<DoBalanceEnquiryResponse> doBalanceEnquiry(PrincipalApiUser currentApiUser,
-                                                                 EnquiryRequest enquiryRequest,
+    CompletableFuture<DoBalanceEnquiryResponse> doBalanceEnquiry(EnquiryRequest enquiryRequest,
                                                                  HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<DoBalanceEnquiryResponse> doFundsTransfer(PrincipalApiUser currentApiUser,
-                                                                EnquiryRequest enquiryRequest,
+    CompletableFuture<DoBalanceEnquiryResponse> doFundsTransfer(EnquiryRequest enquiryRequest,
                                                                 HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<DoBalanceEnquiryResponse> confirmTransaction(PrincipalApiUser currentApiUser,
-                                                                   EnquiryRequest enquiryRequest,
+    CompletableFuture<DoBalanceEnquiryResponse> confirmTransaction(EnquiryRequest enquiryRequest,
                                                                    HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 
-    CompletableFuture<DoBalanceEnquiryResponse> reverseTransaction(PrincipalApiUser currentApiUser,
-                                                                   ReverseTransactionRequest reverseTransactionRequest,
+    CompletableFuture<DoBalanceEnquiryResponse> reverseTransaction(ReverseTransactionRequest reverseTransactionRequest,
                                                                    HttpServletRequest servletRequest) throws GenericException, JsonProcessingException;
 }

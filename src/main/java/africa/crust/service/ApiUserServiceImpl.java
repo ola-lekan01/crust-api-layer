@@ -1,6 +1,5 @@
 package africa.crust.service;
 
-import africa.crust.auth.PrincipalApiUser;
 import africa.crust.data.dtos.request.*;
 import africa.crust.data.dtos.response.*;
 import africa.crust.exceptions.GenericException;
@@ -15,6 +14,7 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
@@ -33,11 +33,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     private final String baseUrl = "https://issuecards.api.bridgecard.co";
 
     @Override
-    public CompletableFuture<CardResponse> registerCardHolderSynchronously(PrincipalApiUser currentApiUser,
-                                                                           HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> registerCardHolderSynchronously(HttpServletRequest servletRequest,
                                                                            CardHolderRegistration cardHolderRegistration) throws GenericException, JsonProcessingException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cardholder/register_cardholder_synchronously")).newBuilder();
@@ -79,11 +78,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardHolderDetailResponse> getCardHolderDetails(PrincipalApiUser currentApiUser,
-                                                                            HttpServletRequest servletRequest,
+    public CompletableFuture<CardHolderDetailResponse> getCardHolderDetails(HttpServletRequest servletRequest,
                                                                             String cardHolderId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardHolderDetailResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
@@ -121,11 +119,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardHolderDetailResponse> deleteCardHolder(PrincipalApiUser currentApiUser,
-                                                                        HttpServletRequest servletRequest,
+    public CompletableFuture<CardHolderDetailResponse> deleteCardHolder(HttpServletRequest servletRequest,
                                                                         String cardHolderId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardHolderDetailResponse> future = new CompletableFuture<>();
 
 
@@ -164,11 +161,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardResponse> createCard(PrincipalApiUser currentApiUser,
-                                                      HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> createCard(HttpServletRequest servletRequest,
                                                       CreateCardRequest createCardRequest) throws GenericException, JsonProcessingException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid( servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         String createAccountRequest = mapper.writeValueAsString(createCardRequest);
@@ -210,11 +206,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardResponse> activatePhysicalCard(PrincipalApiUser currentApiUser,
-                                                                HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> activatePhysicalCard(HttpServletRequest servletRequest,
                                                                 CreateCardRequest createCardRequest) throws GenericException, JsonProcessingException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -258,11 +253,10 @@ public class ApiUserServiceImpl implements ApiUserService {
 
 
     @Override
-    public CompletableFuture<CardDetailResponse> getCardDetails(PrincipalApiUser currentApiUser,
-                                                                HttpServletRequest servletRequest,
+    public CompletableFuture<CardDetailResponse> getCardDetails(HttpServletRequest servletRequest,
                                                                 String cardId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardDetailResponse> future = new CompletableFuture<>();
 
 
@@ -300,11 +294,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardBalanceResponse> getCardBalance(PrincipalApiUser currentApiUser,
-                                                                 HttpServletRequest servletRequest,
+    public CompletableFuture<CardBalanceResponse> getCardBalance(HttpServletRequest servletRequest,
                                                                  String cardId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardBalanceResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
@@ -341,11 +334,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardResponse> fundCard(PrincipalApiUser currentApiUser,
-                                                    HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> fundCard(HttpServletRequest servletRequest,
                                                     FundCardRequest fundCardRequest) throws GenericException, JsonProcessingException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cards/fund_card")).newBuilder();
@@ -387,11 +379,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardResponse> unloadCard(PrincipalApiUser currentApiUser,
-                                                      HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> unloadCard(HttpServletRequest servletRequest,
                                                       FundCardRequest fundCardRequest) throws GenericException, JsonProcessingException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cards/unload_card")).newBuilder();
@@ -434,11 +425,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardTransactionsResponse> getCardTransactions(PrincipalApiUser currentApiUser,
-                                                                           HttpServletRequest servletRequest,
+    public CompletableFuture<CardTransactionsResponse> getCardTransactions(HttpServletRequest servletRequest,
                                                                            String cardId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardTransactionsResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cards/get_card_transactions?card_id=" + cardId + "&page=1")).newBuilder();
@@ -475,11 +465,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardTransactionsResponse> getCardTransaction(PrincipalApiUser currentApiUser,
-                                                                          HttpServletRequest servletRequest,
+    public CompletableFuture<CardTransactionsResponse> getCardTransaction(HttpServletRequest servletRequest,
                                                                           String cardId, String clientTransactionReference) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardTransactionsResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder =
@@ -517,10 +506,9 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardResponse> freezeCard(PrincipalApiUser currentApiUser,
-                                                      HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> freezeCard(HttpServletRequest servletRequest,
                                                       String cardId) throws GenericException {
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder =
@@ -558,11 +546,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardResponse> unFreezeCard(PrincipalApiUser currentApiUser,
-                                                        HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> unFreezeCard(HttpServletRequest servletRequest,
                                                         String cardId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder =
@@ -600,11 +587,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardHolderCardResponse> getCardHolderCardsDetails(PrincipalApiUser currentApiUser,
-                                                                               HttpServletRequest servletRequest,
+    public CompletableFuture<CardHolderCardResponse> getCardHolderCardsDetails(HttpServletRequest servletRequest,
                                                                                String cardHolderId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardHolderCardResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
@@ -645,11 +631,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     // Naira Cards Endpoint
 
     @Override
-    public CompletableFuture<CardResponse> createNairaVirtualAccount(PrincipalApiUser currentApiUser,
-                                                                     HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> createNairaVirtualAccount(HttpServletRequest servletRequest,
                                                                      String cardHolderId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         JSONObject cardRequest = new JSONObject();
@@ -691,11 +676,10 @@ public class ApiUserServiceImpl implements ApiUserService {
         return future;
     }
 
-    public CompletableFuture<CardBalanceResponse> getNairaCardBalance(PrincipalApiUser currentApiUser,
-                                                                      HttpServletRequest servletRequest,
+    public CompletableFuture<CardBalanceResponse> getNairaCardBalance(HttpServletRequest servletRequest,
                                                                       String cardHolderId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardBalanceResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(
@@ -735,11 +719,10 @@ public class ApiUserServiceImpl implements ApiUserService {
 
 
     @Override
-    public CompletableFuture<GetAllBanksCode> getAllBanksCode(PrincipalApiUser currentApiUser,
-                                                              HttpServletRequest servletRequest) throws GenericException {
-        CompletableFuture<GetAllBanksCode> future = new CompletableFuture<>();
+    public CompletableFuture<GetAllBanksCode> getAllBanksCode(HttpServletRequest servletRequest) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
+        CompletableFuture<GetAllBanksCode> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/naira_cards/get_all_bank_codes")).newBuilder();
         Request request = new Request.Builder()
@@ -775,10 +758,9 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardResponse> verifyAccountNumber(PrincipalApiUser currentApiUser,
-                                                               HttpServletRequest servletRequest,
+    public CompletableFuture<CardResponse> verifyAccountNumber(HttpServletRequest servletRequest,
                                                                AccountNumberVerificationRequest verificationRequest) throws GenericException {
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/naira_" +
@@ -817,11 +799,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<CardTransactionsResponse> getNairaCardTransactions(PrincipalApiUser currentApiUser,
-                                                                                HttpServletRequest servletRequest,
+    public CompletableFuture<CardTransactionsResponse> getNairaCardTransactions(HttpServletRequest servletRequest,
                                                                                 String cardHolderId) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<CardTransactionsResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/" +
@@ -861,11 +842,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<TransferResponse> thirdPartyTransfer(PrincipalApiUser currentApiUser,
-                                                                  HttpServletRequest servletRequest,
+    public CompletableFuture<TransferResponse> thirdPartyTransfer(HttpServletRequest servletRequest,
                                                                   ThirdPartyTransferRequest thirdPartyTransferRequest) throws GenericException, JsonProcessingException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<TransferResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/naira_cards/third_party_transfer")).newBuilder();
@@ -907,11 +887,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<TransferResponse> sameBankTransfer(PrincipalApiUser currentApiUser,
-                                                                HttpServletRequest servletRequest,
+    public CompletableFuture<TransferResponse> sameBankTransfer(HttpServletRequest servletRequest,
                                                                 SameBankTransferRequest sameBankTransfer) throws GenericException, JsonProcessingException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<TransferResponse> future = new CompletableFuture<>();
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/naira_cards/providus_account_transfer")).newBuilder();
 
@@ -953,10 +932,9 @@ public class ApiUserServiceImpl implements ApiUserService {
 
     // Miscellaneous APIs
     @Override
-    public CompletableFuture<AllCardholdersResponse> getAllCreatedCardHolders(PrincipalApiUser currentApiUser,
-                                                                              HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<AllCardholdersResponse> getAllCreatedCardHolders(HttpServletRequest servletRequest) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<AllCardholdersResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cards/get_all_cardholder?page=1")).newBuilder();
@@ -994,10 +972,9 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<IssuedCardResponse> getAllIssuedCard(PrincipalApiUser currentApiUser,
-                                                                  HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<IssuedCardResponse> getAllIssuedCard(HttpServletRequest servletRequest) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<IssuedCardResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cards/get_all_cards?page=1")).newBuilder();
@@ -1034,19 +1011,18 @@ public class ApiUserServiceImpl implements ApiUserService {
         return future;
     }
 
-    private void isCurrentUserValid(PrincipalApiUser currentApiUser,
-                                    HttpServletRequest servletRequest) throws GenericException {
+    private void isCurrentUserValid(HttpServletRequest servletRequest) throws GenericException {
         boolean isCurrentUserIpAddressAndAccessKeyValid =
-                accessService.isCurrentUserIpAddressAndAccessKeyValid(currentApiUser, servletRequest);
+                accessService.isCurrentUserIpAddressAndAccessKeyValid(servletRequest);
+
         if (!isCurrentUserIpAddressAndAccessKeyValid)
             throw new GenericException("Bad Request, Check Credentials and try again");
     }
 
     @Override
-    public CompletableFuture<IssuingWalletResponse> fundIssuingWallet(PrincipalApiUser currentApiUser,
-                                                                      HttpServletRequest servletRequest,
+    public CompletableFuture<IssuingWalletResponse> fundIssuingWallet(HttpServletRequest servletRequest,
                                                                       String amount) throws GenericException {
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<IssuingWalletResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cards/fund_issuing_wallet")).newBuilder();
@@ -1090,9 +1066,9 @@ public class ApiUserServiceImpl implements ApiUserService {
 
 
     @Override
-    public CompletableFuture<IssuingWalletResponse> getIssuingWalletBalance(PrincipalApiUser currentApiUser,
-                                                                            HttpServletRequest servletRequest) throws GenericException {
-        isCurrentUserValid(currentApiUser, servletRequest);
+    public CompletableFuture<IssuingWalletResponse> getIssuingWalletBalance(HttpServletRequest servletRequest) throws GenericException {
+
+        isCurrentUserValid(servletRequest);
         CompletableFuture<IssuingWalletResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cards/get_issuing_wallet_balance")).newBuilder();
@@ -1130,10 +1106,9 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<FXRateExchange> getFXRateExchange(PrincipalApiUser currentApiUser,
-                                                               HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<FXRateExchange> getFXRateExchange(HttpServletRequest servletRequest) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<FXRateExchange> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/cards/fx-rate")).newBuilder();
@@ -1171,10 +1146,9 @@ public class ApiUserServiceImpl implements ApiUserService {
     }
 
     @Override
-    public CompletableFuture<AllStatesResponse> getAllStates(PrincipalApiUser currentApiUser,
-                                                             HttpServletRequest servletRequest) throws GenericException {
+    public CompletableFuture<AllStatesResponse> getAllStates(HttpServletRequest servletRequest) throws GenericException {
 
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         CompletableFuture<AllStatesResponse> future = new CompletableFuture<>();
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/cardholder/get_all_states?country=Nigeria")).newBuilder();

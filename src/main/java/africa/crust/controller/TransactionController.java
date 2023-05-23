@@ -25,16 +25,15 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 @Tag(name = "Crust Transaction Endpoint", description = "This endpoints contains related Transaction Endpoints")
 @SecurityRequirement(name = "SECRET_KEY")
-@SecurityRequirement(name = "BearerAuth")
+//@SecurityRequirement(name = "BearerAuth")
 public class TransactionController {
     private final TransactionApiService transactionApiService;
 
     @GetMapping("/get-customer-transactions-by-reference-number")
-    public ResponseEntity<ApiResponse> getCustomerTransactionsByReferenceNumber(@CurrentApiUser PrincipalApiUser currentApiUser,
-                                                                                @RequestParam("referenceNumber") String referenceNumber,
+    public ResponseEntity<ApiResponse> getCustomerTransactionsByReferenceNumber(@RequestParam("referenceNumber") String referenceNumber,
                                                                                 HttpServletRequest request) {
         try {
-            CompletableFuture<AccountTransactionResponse> response = transactionApiService.getCustomerTransactionsByReferenceNumber(currentApiUser, referenceNumber, request);
+            CompletableFuture<AccountTransactionResponse> response = transactionApiService.getCustomerTransactionsByReferenceNumber(referenceNumber, request);
             return new ResponseEntity<>(new ApiResponse(true, "Successfully",
                     request.getRequestURL().toString(), response.get()), HttpStatus.CREATED);
         } catch (GenericException | InterruptedException | ExecutionException exception) {

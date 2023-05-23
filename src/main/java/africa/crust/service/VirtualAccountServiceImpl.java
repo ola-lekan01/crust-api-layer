@@ -1,6 +1,5 @@
 package africa.crust.service;
 
-import africa.crust.auth.PrincipalApiUser;
 import africa.crust.data.dtos.request.CreateVirtualAccountRequest;
 import africa.crust.data.dtos.request.InitiatePaymentRequest;
 import africa.crust.data.dtos.response.ErrorResponse;
@@ -33,11 +32,10 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
     private final OkHttpClient client = new OkHttpClient();
 
     @Override
-    public CompletableFuture<VirtualAccountResponse> createVirtualAccount(PrincipalApiUser currentApiUser,
-                                                                          CreateVirtualAccountRequest accountRequest,
+    public CompletableFuture<VirtualAccountResponse> createVirtualAccount(CreateVirtualAccountRequest accountRequest,
                                                                           HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
         CompletableFuture<VirtualAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         String url = baseUrl + "/api/VirtualAccount/CreateVirtualAccountsRequest/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         String body = mapper.writeValueAsString(accountRequest);
@@ -74,11 +72,10 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
     }
 
     @Override
-    public CompletableFuture<VirtualAccountResponse> getVirtualAccountCreationStatus(PrincipalApiUser currentApiUser,
-                                                                                     String trackingRef,
+    public CompletableFuture<VirtualAccountResponse> getVirtualAccountCreationStatus(String trackingRef,
                                                                                      HttpServletRequest servletRequest) throws GenericException {
         CompletableFuture<VirtualAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         String url = baseUrl + "/api/VirtualAccount/CheckVirtualAccountsCreationStatus/2?authtoken=" + authToken + "&trackingRef=" + trackingRef;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
 
@@ -116,11 +113,10 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
     }
 
     @Override
-    public CompletableFuture<VirtualAccountResponse> initiatePayment(PrincipalApiUser currentApiUser,
-                                                                     InitiatePaymentRequest initiatePayment,
+    public CompletableFuture<VirtualAccountResponse> initiatePayment(InitiatePaymentRequest initiatePayment,
                                                                      HttpServletRequest servletRequest) throws GenericException, JsonProcessingException {
         CompletableFuture<VirtualAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
         String url = baseUrl + "/api/VirtualAccount/InitiatePayment/2?authtoken=" + authToken;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         String body = mapper.writeValueAsString(initiatePayment);
@@ -160,11 +156,11 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
 
 
     @Override
-    public CompletableFuture<VirtualAccountResponse> verifyTransaction(PrincipalApiUser currentApiUser,
-                                                                       String uniqueReference,
+    public CompletableFuture<VirtualAccountResponse> verifyTransaction(String uniqueReference,
                                                                        HttpServletRequest servletRequest) throws GenericException {
         CompletableFuture<VirtualAccountResponse> future = new CompletableFuture<>();
-        isCurrentUserValid(currentApiUser, servletRequest);
+        isCurrentUserValid(servletRequest);
+
         String url = baseUrl + "/api/VirtualAccount/VerifyTransaction/2?authtoken=" + authToken + "&uniqueReference=" + uniqueReference;
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         Request request = new Request.Builder()
@@ -200,12 +196,10 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
     }
 
 
-    private void isCurrentUserValid(PrincipalApiUser currentApiUser,
-                                    HttpServletRequest servletRequest) throws GenericException {
+    private void isCurrentUserValid(HttpServletRequest servletRequest) throws GenericException {
         boolean isCurrentUserIpAddressAndAccessKeyValid =
-                accessService.isCurrentUserIpAddressAndAccessKeyValid(currentApiUser, servletRequest);
+                accessService.isCurrentUserIpAddressAndAccessKeyValid(servletRequest);
         if (!isCurrentUserIpAddressAndAccessKeyValid)
             throw new GenericException("Bad Request, Check Credentials and try again");
     }
-
 }
