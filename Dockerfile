@@ -14,6 +14,9 @@ COPY gradlew .
 COPY gradlew.bat .
 COPY --chown=gradle:gradle . .
 
+# Grant executable permissions to the gradlew script
+RUN chmod +x gradlew
+
 # Build and package the application using Gradle
 RUN ./gradlew build --no-daemon
 
