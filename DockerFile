@@ -11,7 +11,7 @@ COPY ./build/libs/crust-api-layer-0.0.1-SNAPSHOT.jar /app/crustcoreapi.jar
 COPY ./config.env /app/config.env
 
 # Expose the port for remote debugging
-EXPOSE 8089
+EXPOSE 8080
 
 # Start the Java application with remote debugging enabled
 ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,address=0.0.0.0:8089,server=y,suspend=n", "-jar", "/app/crustcoreapi.jar"]
