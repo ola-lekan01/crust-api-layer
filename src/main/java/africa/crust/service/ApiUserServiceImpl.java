@@ -719,7 +719,6 @@ public class ApiUserServiceImpl implements ApiUserService {
 
 
     @Override
-    @Async
     public CompletableFuture<GetAllBanksCode> getAllBanksCode(HttpServletRequest servletRequest) throws GenericException {
 
         isCurrentUserValid(servletRequest);
