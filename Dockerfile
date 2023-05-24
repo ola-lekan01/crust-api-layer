@@ -1,5 +1,5 @@
 # Use the official AdoptOpenJDK base image for JDK 17
-FROM openjdk:latest
+FROM openjdk:17
 
 # Set the working directory in the container
 WORKDIR /app
