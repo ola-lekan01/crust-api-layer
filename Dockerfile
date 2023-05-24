@@ -1,4 +1,4 @@
-# Use the official AdoptOpenJDK base image for JDK 17
+# Use the official OpenJDK 17 image as the base image for both stages
 FROM openjdk:17-jdk AS build
 
 # Set the working directory in the container
@@ -13,8 +13,8 @@ COPY src ./src
 # Build the application
 RUN ./gradlew build
 
-# Create a new image with a smaller base image
-FROM adoptopenjdk:17-jre-hotspot
+# Create a new image with JRE 17 only
+FROM openjdk:17-jdk-slim
 
 # Set the working directory in the container
 WORKDIR /app
