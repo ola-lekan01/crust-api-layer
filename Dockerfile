@@ -1,4 +1,4 @@
-# Use the official OpenJDK 17 image as the base image for both stages
+# Use the official OpenJDK 17 image as the base image
 FROM openjdk:17-jdk AS build
 
 # Set the working directory in the container
@@ -10,8 +10,8 @@ COPY build.gradle settings.gradle ./
 # Copy the source code
 COPY src ./src
 
-# Build the application
-RUN ./gradlew build
+# Run the Gradle build command
+RUN ./gradle build
 
 # Create a new image with JRE 17 only
 FROM openjdk:17-jdk-slim
