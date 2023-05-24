@@ -7,14 +7,14 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://crustapi-staging.crust.africa", "http://crustapi-staging.crust.africa", "http://localhost:8080"));
+//        configuration.setAllowedOrigins(List.of("https://crustapi-staging.crust.africa", "http://crustapi-staging.crust.africa", "http://localhost:8080"));
+        configuration.addAllowedOrigin("*");
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "SECRET_KEY", "Access-Control-Allow-Credentials"));
         configuration.setAllowCredentials(true);
