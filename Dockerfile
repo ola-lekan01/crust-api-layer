@@ -1,5 +1,5 @@
-# Use the official Gradle image as the base image
-FROM gradle:jdk17 AS build
+# Use the official AdoptOpenJDK base image for JDK 17
+FROM adoptopenjdk:17-jdk-hotspot AS build
 
 # Set the working directory in the container
 WORKDIR /app
@@ -11,10 +11,10 @@ COPY build.gradle settings.gradle ./
 COPY src ./src
 
 # Build the application
-RUN gradle build --no-daemon
+RUN ./gradlew build
 
-# Create a new image with JRE 17 only
-FROM adoptopenjdk/openjdk17:alpine-jre
+# Create a new image with a smaller base image
+FROM adoptopenjdk:17-jre-hotspot
 
 # Set the working directory in the container
 WORKDIR /app
