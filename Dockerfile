@@ -8,6 +8,9 @@ WORKDIR /app
 COPY gradlew .
 COPY gradle gradle
 
+# Change the permission of the Gradle Wrapper script
+RUN chmod +x gradlew
+
 # Copy the build.gradle and settings.gradle files
 COPY build.gradle settings.gradle ./
 
