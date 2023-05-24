@@ -30,7 +30,7 @@ public class AccountApiServiceImpl implements AccountApiService {
     private final String mfbCode = System.getenv("INSTITUTION_ID");
     private final String institutionCode = System.getenv("INSTITUTION_CODE");
     private final String baseUrl = System.getenv("BASE_URL");
-    private final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client;
 
 
     @Override

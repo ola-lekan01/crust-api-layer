@@ -13,7 +13,5 @@ public interface AuthService {
     RegistrationResponse registerNewUserAccount(HttpServletRequest request, ApiUserRequest userRequest) throws GenericException;
     JwtTokenResponse login( HttpServletRequest request, LoginRequest loginRequest) throws GenericException;
     ApiUser internalFindUserByEmail(String email) throws GenericException;
-
     ApiUser saveAUser(ApiUser user);
-
 }

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,9 +28,8 @@ public class ApiUserServiceImpl implements ApiUserService {
 
     private final ObjectMapper mapper;
     private final String secretKey = System.getenv("CARD_SECRET_KEY");
-
     private final AccessService accessService;
-    private final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client;
     private final String baseUrl = "https://issuecards.api.bridgecard.co";
 
     @Override
@@ -719,12 +719,14 @@ public class ApiUserServiceImpl implements ApiUserService {
 
 
     @Override
+    @Async
     public CompletableFuture<GetAllBanksCode> getAllBanksCode(HttpServletRequest servletRequest) throws GenericException {
 
         isCurrentUserValid(servletRequest);
         CompletableFuture<GetAllBanksCode> future = new CompletableFuture<>();
 
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/v1/issuing/sandbox/naira_cards/get_all_bank_codes")).newBuilder();
+        String url = baseUrl + "/v1/issuing/sandbox/naira_cards/get_all_bank_codes";
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         Request request = new Request.Builder()
                 .url(urlBuilder.build())
                 .get()

@@ -26,7 +26,7 @@ public class TransactionApiServiceImpl implements TransactionApiService {
     private final AccessService accessService;
     private final String authToken = System.getenv("AUTHENTICATION_TOKEN");
     private final String baseUrl = System.getenv("BASE_URL");
-    private final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client;
 
 
     @Override

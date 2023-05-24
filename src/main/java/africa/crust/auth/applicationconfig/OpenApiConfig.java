@@ -14,22 +14,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @SecurityScheme(name = "BearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
 @SecurityScheme(name = "SECRET_KEY", type = SecuritySchemeType.APIKEY, in = SecuritySchemeIn.HEADER, paramName = "SECRET_KEY")
-
 public class OpenApiConfig {
-    Contact lekan = new Contact()
-            .name("Lekan Sofuyi")
-            .email("lekan@crust.africa")
-            .url("https://github.com/ola-lekan01/crust");
-
+    Contact crust = new Contact()
+            .name("Crust Africa Support")
+            .email("team@crust.africa")
+            .url("crust.africa");
 
     @Bean
     public OpenAPI configAPI(){
         return new OpenAPI()
                 .info(new Info()
-                .title("Crust Api ")
+                .title("Crust Api")
                 .version("Version 1.00")
-                .description("Crust Middle Layer")
-                .contact(lekan)
+                .description("Crust Core API Middle Layer")
+                .contact(crust)
                 .termsOfService("An online digital wallet !!! "));
     }
 }

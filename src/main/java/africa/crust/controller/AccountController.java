@@ -187,7 +187,7 @@ public class AccountController {
                     request.getRequestURL().toString(), response.get()), HttpStatus.CREATED);
 
         } catch (GenericException | InterruptedException | ExecutionException exception) {
-            return new ResponseEntity<>(new ApiResponse(false, exception.getMessage().substring(42)), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
