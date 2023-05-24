@@ -1,5 +1,5 @@
 # Use a base image with JDK 17
-FROM adoptopenjdk:17-jdk-hotspot
+FROM openjdk:17-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -15,7 +15,6 @@ COPY src src
 
 # Build the application using Gradle
 RUN ./gradlew build
-
 # Expose the port on which the Spring Boot application will listen
 EXPOSE 8080
 
