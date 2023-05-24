@@ -16,8 +16,11 @@ COPY src src
 # Change permissions for gradlew
 RUN chmod +x gradlew
 
-# Build the application using Gradle
-RUN ./gradlew build
+# Set the environment variable for Gradle heap size
+ENV GRADLE_OPTS="-Xmx2g"
+
+# Build the application using Gradle and run tests
+RUN ./gradlew build --stacktrace --info
 
 # Expose the port on which the Spring Boot application will listen
 EXPOSE 8080
