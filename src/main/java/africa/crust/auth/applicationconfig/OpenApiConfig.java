@@ -28,6 +28,6 @@ public class OpenApiConfig {
                 .version("Version 1.00")
                 .description("Crust Core API Middle Layer")
                 .contact(crust)
-                .termsOfService("An online digital wallet !!! "));
+                .termsOfService("Coming Soon!!! "));
     }
 }
