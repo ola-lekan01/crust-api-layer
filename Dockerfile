@@ -17,7 +17,7 @@ COPY build.gradle settings.gradle ./
 # Copy the source code
 COPY src ./src
 
-# Install xargs
+# Install findutils package
 RUN apt-get update && apt-get install -y findutils
 
 # Run the Gradle build command using the Gradle Wrapper
