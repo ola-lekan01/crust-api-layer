@@ -1,33 +1,20 @@
-# Use a base image with JDK and Gradle pre-installed
-FROM gradle:jdk17-alpine AS build
+# Use a base image with JDK 17
+FROM adoptopenjdk:17-jdk-hotspot
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Gradle build files to the container
+# Copy the Gradle configuration files
 COPY build.gradle .
 COPY settings.gradle .
-COPY gradle ./gradle
-
-# Copy only the Gradle files necessary for dependency resolution
 COPY gradlew .
-COPY gradlew.bat .
-COPY --chown=gradle:gradle . .
+COPY gradle gradle
 
-# Grant executable permissions to the gradlew script
-RUN chmod +x gradlew
+# Copy the source code
+COPY src src
 
-# Build and package the application using Gradle
-RUN ./gradlew build --no-daemon
-
-# Create a new image based on OpenJDK with JRE only
-FROM openjdk:17-jdk-alpine
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the JAR file from the build stage to the container
-COPY --from=build /app/build/libs/*.jar app.jar
+# Build the application using Gradle
+RUN ./gradlew build
 
 # Expose the port on which the Spring Boot application will listen
 EXPOSE 8080
