@@ -13,8 +13,12 @@ COPY gradle gradle
 # Copy the source code
 COPY src src
 
+# Change permissions for gradlew
+RUN chmod +x gradlew
+
 # Build the application using Gradle
 RUN ./gradlew build
+
 # Expose the port on which the Spring Boot application will listen
 EXPOSE 8080
 
